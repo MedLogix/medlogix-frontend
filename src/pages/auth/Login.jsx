@@ -63,7 +63,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-6">
+      <div className="mx-auto flex max-w-md flex-col gap-6">
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-xl">Welcome back</CardTitle>
@@ -97,10 +97,10 @@ const Login = () => {
                 </form>
                 <div className="flex flex-col gap-0.5 text-center text-sm">
                   <span>Don&apos;t have an account?</span>
-                  <Link to="/signup" className="underline underline-offset-4">
-                    Sign up as hospital
+                  <Link to="/institution-signup" className="underline underline-offset-4">
+                    Sign up as institution
                   </Link>
-                  <Link to="/signup" className="underline underline-offset-4">
+                  <Link to="/warehouse-signup" className="underline underline-offset-4">
                     Sign up as warehouse
                   </Link>
                 </div>

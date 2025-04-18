@@ -12,13 +12,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { useTheme } from "@/hooks/use-theme";
-import UserService from "@/services/authService";
+import { USER_ROLE } from "@/lib/constants";
+import { logout } from "@/store/user/slice";
 import { useCallback, useMemo } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { Switch } from "../ui/switch";
-import { logout } from "@/store/user/slice";
-import { useDispatch } from "react-redux";
-import { USER_ROLE } from "@/lib/constants";
 
 export function NavUser({ user, userRole }) {
   const { isMobile } = useSidebar();
@@ -28,11 +27,9 @@ export function NavUser({ user, userRole }) {
 
   const logoutUser = useCallback(async () => {
     try {
-      await UserService.logout();
       localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
       dispatch(logout());
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.error(error);
     }
