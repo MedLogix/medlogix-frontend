@@ -55,6 +55,13 @@ const CreateManufacturerModal = ({
         repContact: initialValues.repContact || initialValues.medicalRepresentator?.contact || "",
       });
     }
+    if (isOpen && !isEdit) {
+      form.reset({
+        manufacturerName: "",
+        repName: "",
+        repContact: "",
+      });
+    }
   }, [isEdit, isOpen, initialValues, form]);
 
   const { mutate, isPending } = useMutation({

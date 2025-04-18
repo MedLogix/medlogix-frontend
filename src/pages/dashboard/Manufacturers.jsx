@@ -42,10 +42,10 @@ const columns = [
 const Manufacturers = () => {
   const { page, setPage, pageSize, setPageSize, search, setSearch } = usePaginationSearchParams();
   const [searchQuery, setSearchQuery] = useState(search);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState("create");
   const [selectedManufacturer, setSelectedManufacturer] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -75,13 +75,20 @@ const Manufacturers = () => {
     },
   });
 
-  const handleEdit = (manufacturer) => {
-    setSelectedManufacturer(manufacturer);
-    setIsEditModalOpen(true);
+  const handleCreate = () => {
+    setModalMode("create");
+    setSelectedManufacturer(null);
+    setIsModalOpen(true);
   };
 
-  const handleEditModalClose = () => {
-    setIsEditModalOpen(false);
+  const handleEdit = (manufacturer) => {
+    setModalMode("edit");
+    setSelectedManufacturer(manufacturer);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
     setSelectedManufacturer(null);
   };
 
@@ -157,13 +164,12 @@ const Manufacturers = () => {
 
   return (
     <div className="container mx-auto">
-      <CreateManufacturerModal isOpen={isCreateModalOpen} setIsOpen={setIsCreateModalOpen} />
       <CreateManufacturerModal
-        isOpen={isEditModalOpen}
-        setIsOpen={handleEditModalClose}
-        mode="edit"
+        isOpen={isModalOpen}
+        setIsOpen={handleModalClose}
+        mode={modalMode}
         initialValues={selectedManufacturer || {}}
-        onSubmit={() => handleEditModalClose()}
+        onSubmit={handleModalClose}
       />
       <DeleteModal
         open={isDeleteModalOpen}
@@ -183,7 +189,7 @@ const Manufacturers = () => {
           onChange={handleSearchChange}
           wrapperClassName="max-w-sm w-full"
         />
-        <Button onClick={() => setIsCreateModalOpen(true)}>Create Manufacturer</Button>
+        <Button onClick={handleCreate}>Create Manufacturer</Button>
       </div>
       {isLoading ? (
         <div>Loading...</div>

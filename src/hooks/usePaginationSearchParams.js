@@ -6,8 +6,8 @@ const DEFAULT_PAGE_SIZE = 10;
 
 export default function usePaginationSearchParams() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [page, setPage] = useState(searchParams.get("page") || DEFAULT_PAGE);
-  const [pageSize, setPageSize] = useState(searchParams.get("limit") || DEFAULT_PAGE_SIZE);
+  const [page, setPage] = useState(parseInt(searchParams.get("page")) || DEFAULT_PAGE);
+  const [pageSize, setPageSize] = useState(parseInt(searchParams.get("limit")) || DEFAULT_PAGE_SIZE);
   const [search, setSearch] = useState(searchParams.get("search") || "");
 
   useEffect(() => {
