@@ -35,7 +35,7 @@ const columns = [
   },
 ];
 
-const Manufacturers = () => {
+const Salts = () => {
   const { page, setPage, pageSize, setPageSize, search, setSearch } = usePaginationSearchParams();
   const [searchQuery, setSearchQuery] = useState(search);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -204,4 +204,4 @@ const Manufacturers = () => {
   );
 };
 
-export default Manufacturers;
+export default Salts;
