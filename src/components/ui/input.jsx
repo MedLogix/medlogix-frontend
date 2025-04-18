@@ -3,14 +3,14 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
 
-const Input = React.forwardRef(({ className, type, togglePassword = true, ...props }, ref) => {
+const Input = React.forwardRef(({ className, wrapperClassName, type, togglePassword = true, ...props }, ref) => {
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
 
   const toggleVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
   };
   return (
-    <div className="relative flex items-center">
+    <div className={cn("relative flex items-center", wrapperClassName)}>
       <input
         type={togglePassword && isPasswordVisible ? "text" : type}
         className={cn(

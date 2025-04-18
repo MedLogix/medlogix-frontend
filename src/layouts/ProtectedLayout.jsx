@@ -16,9 +16,10 @@ const ProtectedLayout = () => {
     setIsLoadingGetMyProfile(true);
     if (isAuthenticated) {
       try {
-        await dispatch(getCurrentUser());
+        await dispatch(getCurrentUser()).unwrap();
       } catch (error) {
         console.log(error);
+        localStorage.removeItem("accessToken");
         navigate("/login");
       }
     }
