@@ -28,7 +28,7 @@ const navItems = [
 ];
 
 export function AppSidebar({ ...props }) {
-  const { user } = useSelector((root) => root.user);
+  const { user, userRole } = useSelector((root) => root.user);
   const { pathname } = useLocation();
 
   return (
@@ -43,7 +43,7 @@ export function AppSidebar({ ...props }) {
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">MedLogix</span>
-            <span className="truncate text-xs">AI Interview Prep</span>
+            <span className="truncate text-xs">Drug Monitoring System</span>
           </div>
         </SidebarMenuButton>
       </SidebarHeader>
@@ -52,11 +52,7 @@ export function AppSidebar({ ...props }) {
           <SidebarMenu>
             {navItems.map((item) => (
               <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton
-                  isActive={pathname === item.url}
-                  tooltip={item.name}
-                  asChild
-                >
+                <SidebarMenuButton isActive={pathname === item.url} tooltip={item.name} asChild>
                   <Link to={item.url}>
                     <item.icon />
                     <span>{item.name}</span>
@@ -68,7 +64,7 @@ export function AppSidebar({ ...props }) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <NavUser user={user} userRole={userRole} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

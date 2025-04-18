@@ -1,12 +1,4 @@
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Moon,
-  Sun,
-} from "lucide-react";
+import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Moon, Sun } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -18,21 +10,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { useTheme } from "@/hooks/use-theme";
-import UserService from "@/services/userService";
-import { useCallback } from "react";
+import UserService from "@/services/authService";
+import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { Switch } from "../ui/switch";
+import { logout } from "@/store/user/slice";
+import { useDispatch } from "react-redux";
+import { USER_ROLE } from "@/lib/constants";
 
-export function NavUser({ user }) {
+export function NavUser({ user, userRole }) {
   const { isMobile } = useSidebar();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { theme, setTheme } = useTheme();
 
   const logoutUser = useCallback(async () => {
@@ -40,16 +31,22 @@ export function NavUser({ user }) {
       await UserService.logout();
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      dispatch(logout());
       navigate("/");
     } catch (error) {
       console.error(error);
     }
-  }, [navigate]);
+  }, [navigate, dispatch]);
 
   const toggleTheme = useCallback(() => {
     if (theme === "dark") setTheme("light");
     else setTheme("dark");
   }, [setTheme, theme]);
+
+  const userName = useMemo(() => {
+    if (userRole === USER_ROLE.ADMIN) return "Admin";
+    else return user?.name;
+  }, [user, userRole]);
 
   return (
     <SidebarMenu>
@@ -61,13 +58,10 @@ export function NavUser({ user }) {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user?.avatar.url} alt={user?.username} />
-                <AvatarFallback className="rounded-lg uppercase">
-                  {user?.username?.slice(0, 1)}
-                </AvatarFallback>
+                <AvatarFallback className="rounded-lg uppercase">{userName?.slice(0, 1)}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user?.username}</span>
+                <span className="truncate font-semibold">{userName}</span>
                 <span className="truncate text-xs">{user?.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -86,9 +80,7 @@ export function NavUser({ user }) {
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">
-                    {user?.username}
-                  </span>
+                  <span className="truncate font-semibold">{user?.username}</span>
                   <span className="truncate text-xs">{user?.email}</span>
                 </div>
               </div>

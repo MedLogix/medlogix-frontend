@@ -2,16 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { USER_ROLE } from "@/lib/constants";
 import AuthService from "@/services/authService";
 import { setUser } from "@/store/user/slice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -20,8 +19,7 @@ const formSchema = z.object({
   password: z.string().min(1).max(50),
 });
 
-const Login = () => {
-  const [activeTab, setActiveTab] = useState(USER_ROLE.INSTITUTION);
+const AdminLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { handleSubmit, register } = useForm({
@@ -72,16 +70,6 @@ const Login = () => {
           <CardContent>
             <div>
               <div className="grid gap-6">
-                <Tabs value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList className="w-full">
-                    <TabsTrigger value={USER_ROLE.INSTITUTION} className="w-1/2">
-                      Institution
-                    </TabsTrigger>
-                    <TabsTrigger value={USER_ROLE.WAREHOUSE} className="w-1/2">
-                      Warehouse
-                    </TabsTrigger>
-                  </TabsList>
-                </Tabs>
                 <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
@@ -95,25 +83,13 @@ const Login = () => {
                     Login
                   </Button>
                 </form>
-                <div className="flex flex-col gap-0.5 text-center text-sm">
-                  <span>Don&apos;t have an account?</span>
-                  <Link to="/signup" className="underline underline-offset-4">
-                    Sign up as hospital
-                  </Link>
-                  <Link to="/signup" className="underline underline-offset-4">
-                    Sign up as warehouse
-                  </Link>
-                </div>
               </div>
             </div>
           </CardContent>
         </Card>
-        <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
-          By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
-        </div>
       </div>
     </>
   );
 };
 
-export default Login;
+export default AdminLogin;
