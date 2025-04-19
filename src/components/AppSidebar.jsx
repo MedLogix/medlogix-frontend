@@ -53,6 +53,12 @@ const navItems = [
     icon: Map,
     roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
   },
+  {
+    name: "Warehouse Stock",
+    url: "/warehouse-stock",
+    icon: Map,
+    roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
+  },
 ];
 
 export function AppSidebar({ ...props }) {

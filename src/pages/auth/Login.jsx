@@ -36,7 +36,7 @@ const Login = () => {
     mutationFn: async (payload) => {
       const _payload = {
         ...payload,
-        userType: USER_ROLE.ADMIN,
+        userType: activeTab,
       };
       const { data } = await AuthService.login(_payload);
       return data?.data;

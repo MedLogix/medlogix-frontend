@@ -17,6 +17,7 @@ import SuccessfulRegistration from "./pages/auth/SuccessfulRegistration";
 import WarehouseSignupForm from "./pages/auth/WarehouseSignup";
 import Institutions from "./pages/dashboard/Institutions";
 import Warehouses from "./pages/dashboard/Warehouses";
+import WarehouseStock from "./pages/dashboard/WarehouseStock";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -39,6 +40,7 @@ createRoot(document.getElementById("root")).render(
               <Route path="/medicines" element={<Medicines />} />
               <Route path="/institutions" element={<Institutions />} />
               <Route path="/warehouses" element={<Warehouses />} />
+              <Route path="/warehouse-stock" element={<WarehouseStock />} />
             </Route>
           </Route>
         </Routes>
