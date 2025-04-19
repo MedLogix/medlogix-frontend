@@ -63,7 +63,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="mx-auto flex max-w-md flex-col gap-6">
+      <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-xl">Welcome back</CardTitle>

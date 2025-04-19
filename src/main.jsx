@@ -14,6 +14,7 @@ import Medicines from "./pages/dashboard/Medicines";
 import Salts from "./pages/dashboard/Salts";
 import InstitutionSignupForm from "./pages/auth/InstituitionSignup";
 import SuccessfulRegistration from "./pages/auth/SuccessfulRegistration";
+import WarehouseSignupForm from "./pages/auth/WarehouseSignup";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -24,6 +25,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/login" element={<Login />} />
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/institution-signup" element={<InstitutionSignupForm />} />
+            <Route path="/warehouse-signup" element={<WarehouseSignupForm />} />
             <Route path="/successful-registration" element={<SuccessfulRegistration />} />
           </Route>
 
