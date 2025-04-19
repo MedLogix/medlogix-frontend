@@ -24,6 +24,18 @@ const navItems = [
     roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE, USER_ROLE.INSTITUTION],
   },
   {
+    name: "Institutions",
+    url: "/institutions",
+    icon: Home,
+    roles: [USER_ROLE.ADMIN],
+  },
+  {
+    name: "Warehouses",
+    url: "/warehouses",
+    icon: Home,
+    roles: [USER_ROLE.ADMIN],
+  },
+  {
     name: "Manufacturers",
     url: "/manufacturers",
     icon: Home,

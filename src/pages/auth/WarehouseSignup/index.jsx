@@ -13,6 +13,7 @@ import ReviewStep from "./ReviewStep";
 import AuthService from "@/services/authService";
 import { toast } from "sonner";
 import { USER_ROLE } from "@/lib/constants";
+import { useNavigate } from "react-router";
 
 const warehouseSignupSchema = z.object({
   warehouseCode: z.string().min(1, "Warehouse code is required"),
@@ -89,6 +90,7 @@ const defaultValues = {
 
 export default function WarehouseSignupForm() {
   const [step, setStep] = useState(0);
+  const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(warehouseSignupSchema),
     defaultValues,
@@ -98,7 +100,8 @@ export default function WarehouseSignupForm() {
     mutationFn: (data) => AuthService.register({ ...data, userType: USER_ROLE.WAREHOUSE }),
     onSuccess: (data) => {
       console.log(data);
-      toast.success("Warehouse created successfully");
+      toast.success("Your registration request is submitted successfully");
+      navigate("/successful-registration");
     },
     onError: (error) => {
       const errorMessage = error.response?.data?.message || "Something went wrong";
