@@ -8,10 +8,10 @@ const InstitutionService = {
     return apiClient.get(`/api/v1/institution/${id}`);
   },
   approveInstitution: (id) => {
-    return apiClient.post(`/api/v1/institution/approve/${id}`);
+    return apiClient.post(`/api/v1/institution/${id}/approve`);
   },
   rejectInstitution: (id, payload) => {
-    return apiClient.post(`/api/v1/institution/reject/${id}`, payload);
+    return apiClient.post(`/api/v1/institution/${id}/reject`, payload);
   },
 };
 

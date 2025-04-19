@@ -1,9 +1,11 @@
 import InstituitionDetailsModal from "@/components/Modals/InstituitionDetailsModal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Combobox from "@/components/ui/combobox";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import usePaginationSearchParams from "@/hooks/usePaginationSearchParams";
+import { VERIFICATION_STATUS_OPTIONS } from "@/lib/constants";
 import InstitutionService from "@/services/institutionService";
 import { useQuery } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
@@ -41,19 +43,20 @@ const columns = [
 ];
 
 const Institutions = () => {
-  const { page, setPage, pageSize, setPageSize, search, setSearch } = usePaginationSearchParams();
+  const { page, setPage, pageSize, setPageSize, search, setSearch, filters, setFilters } = usePaginationSearchParams();
   const [searchQuery, setSearchQuery] = useState(search);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInstitution, setSelectedInstitution] = useState(null);
 
   const { data: institutionsData, isLoading } = useQuery({
-    queryKey: ["institutions", page, pageSize, search],
+    queryKey: ["institutions", page, pageSize, search, filters],
     queryFn: async () => {
       const { data } = await InstitutionService.getInstitutions({
         params: {
           page: page + 1,
           limit: pageSize,
           search,
+          filters: JSON.stringify(filters),
         },
       });
       return data?.data;
@@ -115,19 +118,33 @@ const Institutions = () => {
     debouncedSearch(e.target.value);
   };
 
+  const handleFilterChange = (value) => {
+    setFilters({ ...filters, verificationStatus: value });
+  };
+
   return (
     <div className="container mx-auto">
       <InstituitionDetailsModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} institution={selectedInstitution} />
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Institutions</h1>
       </div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center gap-4">
         <Input
           type="text"
           placeholder="Search..."
           value={searchQuery}
           onChange={handleSearchChange}
           wrapperClassName="max-w-sm w-full"
+        />
+
+        <Combobox
+          options={VERIFICATION_STATUS_OPTIONS}
+          value={filters?.verificationStatus}
+          onChange={handleFilterChange}
+          placeholder="Select verification status"
+          searchPlaceholder="Search verification status..."
+          emptyText="No verification status found."
+          className="w-[300px]"
         />
       </div>
       {isLoading ? (

@@ -9,6 +9,7 @@ export default function usePaginationSearchParams() {
   const [page, setPage] = useState(parseInt(searchParams.get("page")) || DEFAULT_PAGE);
   const [pageSize, setPageSize] = useState(parseInt(searchParams.get("limit")) || DEFAULT_PAGE_SIZE);
   const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [filters, setFilters] = useState(JSON.parse(searchParams.get("filters")) || {});
 
   useEffect(() => {
     setSearchParams((prev) => {
@@ -16,9 +17,10 @@ export default function usePaginationSearchParams() {
       params.set("page", page);
       params.set("limit", pageSize);
       params.set("search", search);
+      params.set("filters", JSON.stringify(filters));
       return params;
     });
-  }, [page, pageSize, search, setSearchParams]);
+  }, [page, pageSize, search, filters, setSearchParams]);
 
-  return { page, setPage, pageSize, setPageSize, search, setSearch };
+  return { page, setPage, pageSize, setPageSize, search, setSearch, filters, setFilters };
 }

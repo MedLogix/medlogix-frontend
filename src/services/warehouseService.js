@@ -8,10 +8,10 @@ const WarehouseService = {
     return apiClient.get(`/api/v1/warehouse/${id}`);
   },
   approveWarehouse: (id) => {
-    return apiClient.post(`/api/v1/warehouse/approve/${id}`);
+    return apiClient.post(`/api/v1/warehouse/${id}/approve`);
   },
   rejectWarehouse: (id, payload) => {
-    return apiClient.post(`/api/v1/warehouse/reject/${id}`, payload);
+    return apiClient.post(`/api/v1/warehouse/${id}/reject`, payload);
   },
 };
 
