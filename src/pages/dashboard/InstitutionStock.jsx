@@ -1,5 +1,6 @@
 import CreateWarehouseStockModal from "@/components/Modals/CreateWarehouseStockModal";
-import { Button, buttonVariants } from "@/components/ui/button";
+import WarehouseStockDetailsModal from "@/components/Modals/WarehouseStockDetailsModal";
+import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import usePaginationSearchParams from "@/hooks/usePaginationSearchParams";
@@ -7,10 +8,8 @@ import WarehouseStockService from "@/services/warehouseStock";
 import { getMedicines } from "@/store/medicine/actions";
 import { useQuery } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
-import moment from "moment";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router";
 
 const columns = [
   {
@@ -27,17 +26,8 @@ const columns = [
     },
   },
   {
-    accessorKey: "availableQuantity",
-    header: "Available",
-    cell: ({ row }) => {
-      const stocks = row?.original?.stocks;
-      const availableQuantity = stocks.reduce((acc, stock) => acc + stock.quantity - stock.reservedQuantity, 0);
-      return availableQuantity;
-    },
-  },
-  {
     accessorKey: "reservedQuantity",
-    header: "Reserved",
+    header: "Reserved Quantity",
     cell: ({ row }) => {
       const stocks = row?.original?.stocks;
       const totalQuantity = stocks.reduce((acc, stock) => acc + stock.reservedQuantity, 0);
@@ -48,24 +38,13 @@ const columns = [
     accessorKey: "createdAt",
     header: "Created At",
     cell: ({ row }) => {
-      const date = row.getValue("createdAt");
-      const formatted = moment(date).format("DD/MM/YYYY");
+      const date = new Date(row.getValue("createdAt"));
+      const formatted = date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
       return <div className="font-medium">{formatted}</div>;
-    },
-  },
-  {
-    accessorKey: "actions",
-    header: "Actions",
-    cell: ({ row }) => {
-      const warehouseStock = row.original;
-      return (
-        <Link
-          to={`/warehouse-stock/${warehouseStock._id}`}
-          className={buttonVariants({ variant: "outline", size: "sm" })}
-        >
-          See Details
-        </Link>
-      );
     },
   },
 ];
@@ -73,6 +52,8 @@ const columns = [
 const WarehouseStock = () => {
   const { page, setPage, pageSize, setPageSize, search, setSearch } = usePaginationSearchParams();
   const [searchQuery, setSearchQuery] = useState(search);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedWarehouseStock, setSelectedWarehouseStock] = useState(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -94,6 +75,30 @@ const WarehouseStock = () => {
     },
     keepPreviousData: true,
   });
+
+  const openDetailsModal = (warehouseStock) => {
+    setSelectedWarehouseStock(warehouseStock);
+    setIsModalOpen(true);
+  };
+
+  const columnsWithActions = useMemo(
+    () => [
+      ...columns,
+      {
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => {
+          const warehouseStock = row.original;
+          return (
+            <Button variant="outline" size="sm" onClick={() => openDetailsModal(warehouseStock)}>
+              See Details
+            </Button>
+          );
+        },
+      },
+    ],
+    []
+  );
 
   const handlePaginationChange = useCallback(
     (updater) => {
@@ -127,6 +132,11 @@ const WarehouseStock = () => {
 
   return (
     <div className="container mx-auto">
+      <WarehouseStockDetailsModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        warehouseStock={selectedWarehouseStock}
+      />
       <CreateWarehouseStockModal isOpen={isCreateModalOpen} setIsOpen={setIsCreateModalOpen} />
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Warehouse Stock</h1>
@@ -139,13 +149,13 @@ const WarehouseStock = () => {
           onChange={handleSearchChange}
           wrapperClassName="max-w-sm w-full"
         />
-        <Button onClick={() => setIsCreateModalOpen(true)}>Add Batch</Button>
+        <Button onClick={() => setIsCreateModalOpen(true)}>Add Stock</Button>
       </div>
       {isLoading ? (
         <div>Loading...</div>
       ) : (
         <DataTable
-          columns={columns}
+          columns={columnsWithActions}
           data={warehouseStockDocs}
           pageCount={pageCount}
           pageIndex={page}

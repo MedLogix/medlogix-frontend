@@ -7,17 +7,18 @@ import AuthLayout from "./layouts/AuthLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import AdminLogin from "./pages/auth/AdminLogin";
+import InstitutionSignupForm from "./pages/auth/InstituitionSignup";
 import Login from "./pages/auth/Login";
+import SuccessfulRegistration from "./pages/auth/SuccessfulRegistration";
+import WarehouseSignupForm from "./pages/auth/WarehouseSignup";
 import DashboardHome from "./pages/dashboard/Home";
+import Institutions from "./pages/dashboard/Institutions";
 import Manufacturers from "./pages/dashboard/Manufacturers";
 import Medicines from "./pages/dashboard/Medicines";
 import Salts from "./pages/dashboard/Salts";
-import InstitutionSignupForm from "./pages/auth/InstituitionSignup";
-import SuccessfulRegistration from "./pages/auth/SuccessfulRegistration";
-import WarehouseSignupForm from "./pages/auth/WarehouseSignup";
-import Institutions from "./pages/dashboard/Institutions";
 import Warehouses from "./pages/dashboard/Warehouses";
 import WarehouseStock from "./pages/dashboard/WarehouseStock";
+import WarehouseStockDetails from "./pages/dashboard/WarehouseStockDetails";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -41,6 +42,7 @@ createRoot(document.getElementById("root")).render(
               <Route path="/institutions" element={<Institutions />} />
               <Route path="/warehouses" element={<Warehouses />} />
               <Route path="/warehouse-stock" element={<WarehouseStock />} />
+              <Route path="/warehouse-stock/:id" element={<WarehouseStockDetails />} />
             </Route>
           </Route>
         </Routes>

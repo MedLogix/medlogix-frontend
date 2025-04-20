@@ -3,7 +3,15 @@ import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-tabl
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DataTablePagination } from "./data-table-pagination";
 
-export function DataTable({ columns, data, pageCount, pageIndex, pageSize, onPaginationChange }) {
+export function DataTable({
+  columns,
+  data,
+  pageCount,
+  pageIndex,
+  pageSize,
+  onPaginationChange,
+  showPagination = true,
+}) {
   const table = useReactTable({
     data,
     columns,
@@ -58,7 +66,7 @@ export function DataTable({ columns, data, pageCount, pageIndex, pageSize, onPag
         </Table>
       </div>
 
-      <DataTablePagination table={table} />
+      {showPagination && <DataTablePagination table={table} />}
     </div>
   );
 }
