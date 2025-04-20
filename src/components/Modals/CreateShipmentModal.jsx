@@ -23,9 +23,11 @@ import { z } from "zod";
 const vehicleSchema = z.object({
   vehicleNumber: z.string().min(1, { message: "Vehicle Number is required." }),
   driverName: z.string().min(1, { message: "Driver Name is required." }),
-  driverContact: z.string().min(1, { message: "Driver Contact is required." }), // Add more specific validation (e.g., regex) if needed
-  loadedAt: z.string().refine((val) => !isNaN(Date.parse(val)), { message: "Invalid Loaded At date." }),
-  departedAt: z.string().refine((val) => !isNaN(Date.parse(val)), { message: "Invalid Departed At date." }),
+  driverContact: z.string().min(1, { message: "Driver Contact is required." }),
+  timestamps: z.object({
+    loadedAt: z.string().refine((val) => !isNaN(Date.parse(val)), { message: "Invalid Loaded At date." }),
+    departedAt: z.string().refine((val) => !isNaN(Date.parse(val)), { message: "Invalid Departed At date." }),
+  }),
 });
 
 // Main form schema
@@ -55,24 +57,15 @@ const CreateShipmentModal = ({ isOpen, setIsOpen, requirementId }) => {
     mutationFn: (formData) => {
       const payload = {
         requirementId,
-        vehicles: formData.vehicles.map((v) => ({
-          ...v,
-          // Ensure dates are in a format the backend expects (e.g., ISO string)
-          // Assuming the date input type="datetime-local" provides a suitable string
-          loadedAt: new Date(v.loadedAt).toISOString(),
-          departedAt: new Date(v.departedAt).toISOString(),
-        })),
-        ...(formData.shipmentId && { shipmentId: formData.shipmentId }), // Include optional shipmentId
+        vehicles: formData.vehicles,
+        ...(formData.shipmentId && { shipmentId: formData.shipmentId }),
       };
       return logisticsService.createLogistics(payload);
     },
-    onSuccess: (data) => {
-      const newLogisticId = data?.data?.data?._id; // Adjust based on actual API response
-      toast.success(
-        `Shipment ${newLogisticId ? `(ID: ${newLogisticId.slice(-6).toUpperCase()}) ` : ""}created successfully!`
-      );
-      queryClient.invalidateQueries({ queryKey: ["warehouseRequirementDetail", requirementId] });
-      queryClient.invalidateQueries({ queryKey: ["logistics"] }); // Invalidate general logistics list if exists
+    onSuccess: () => {
+      toast.success(`Shipment created successfully!`);
+      queryClient.invalidateQueries({ queryKey: ["requirement", requirementId] });
+      queryClient.invalidateQueries({ queryKey: ["logistics", requirementId] });
       handleClose();
     },
     onError: (error) => {
@@ -89,7 +82,6 @@ const CreateShipmentModal = ({ isOpen, setIsOpen, requirementId }) => {
   };
 
   const handleClose = () => {
-    if (isPending) return; // Prevent closing while submitting
     form.reset();
     setIsOpen(false);
   };
@@ -120,10 +112,16 @@ const CreateShipmentModal = ({ isOpen, setIsOpen, requirementId }) => {
               )}
             />
 
-            <h4 className="text-md font-semibold">Vehicle Details</h4>
-            <ScrollArea className="h-[300px] max-h-[50vh] overflow-y-auto pr-4">
+            <div className="flex items-center justify-between">
+              <h4 className="text-md font-semibold">Vehicle Details</h4>
+              <Button type="button" variant="outline" size="sm" onClick={addNewVehicle} disabled={isPending}>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Add Another Vehicle
+              </Button>
+            </div>
+
+            <ScrollArea className="h-[300px] max-h-[50vh] overflow-y-auto">
               <div className="space-y-4">
-                {" "}
                 {/* Container for spacing */}
                 {fields.map((field, index) => (
                   <div key={field.id} className="relative space-y-3 rounded-md border p-4">
@@ -185,7 +183,7 @@ const CreateShipmentModal = ({ isOpen, setIsOpen, requirementId }) => {
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       <FormField
                         control={form.control}
-                        name={`vehicles.${index}.loadedAt`}
+                        name={`vehicles.${index}.timestamps.loadedAt`}
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Loaded At</FormLabel>
@@ -199,7 +197,7 @@ const CreateShipmentModal = ({ isOpen, setIsOpen, requirementId }) => {
                       />
                       <FormField
                         control={form.control}
-                        name={`vehicles.${index}.departedAt`}
+                        name={`vehicles.${index}.timestamps.departedAt`}
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Departed At</FormLabel>
@@ -216,18 +214,6 @@ const CreateShipmentModal = ({ isOpen, setIsOpen, requirementId }) => {
                 ))}
               </div>
             </ScrollArea>
-
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="mt-2"
-              onClick={addNewVehicle}
-              disabled={isPending}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add Another Vehicle
-            </Button>
 
             <DialogFooter>
               <DialogClose asChild>

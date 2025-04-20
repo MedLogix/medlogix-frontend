@@ -5,14 +5,17 @@ import { useParams } from "react-router";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import OverallStatusBadge from "@/components/OverallStatusBadge";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { REQUIREMENT_STATUS, USER_ROLE } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import CreateShipmentModal from "@/components/Modals/CreateShipmentModal";
+import ShipmentTrackingCard from "@/components/ShipmentTrackingCard";
 
 const RequirementDetails = () => {
   const { id: requirementId } = useParams();
   const { userRole } = useSelector((state) => state.user);
+  const [openCreateShipmentModal, setOpenCreateShipmentModal] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: requirement, isLoading } = useQuery({
@@ -79,88 +82,105 @@ const RequirementDetails = () => {
   }
 
   return (
-    <div className="container mx-auto space-y-6 p-4">
-      <h1 className="text-2xl font-semibold">Requirement Details</h1>
-      <Card>
-        <CardHeader className="flex flex-row items-start justify-between">
-          <div>
-            <CardTitle>{title}</CardTitle>
-            {subtitle && <CardDescription>{subtitle}</CardDescription>}
-            <CardDescription className="pt-1">
-              Requested on: {new Date(requirement.createdAt).toLocaleDateString()}
-            </CardDescription>
-          </div>
-          <OverallStatusBadge status={requirement.overallStatus} />
-        </CardHeader>
-        <CardContent>
-          <h3 className="mb-4 text-lg font-medium">Medicines Requested</h3>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Medicine</TableHead>
-                <TableHead className="text-right">Requested Quantity</TableHead>
-                <TableHead className="text-right">Approved Quantity</TableHead>
-                {userRole === USER_ROLE.WAREHOUSE && <TableHead className="text-right">Available Stock</TableHead>}
-                <TableHead className="text-right">Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {requirement.medicines?.map((medicineItem) => {
-                const medicineId = medicineItem.medicineId?._id;
-                const availableStock = medicineStockMap.get(medicineId);
+    <>
+      <CreateShipmentModal
+        isOpen={openCreateShipmentModal}
+        setIsOpen={setOpenCreateShipmentModal}
+        requirementId={requirementId}
+      />
+      <div className="container mx-auto space-y-6">
+        <h1 className="text-2xl font-semibold">Requirement Details</h1>
+        <Card>
+          <CardHeader className="flex flex-row items-start justify-between">
+            <div>
+              <CardTitle>{title}</CardTitle>
+              {subtitle && <CardDescription>{subtitle}</CardDescription>}
+              <CardDescription className="pt-1">
+                Requested on: {new Date(requirement.createdAt).toLocaleDateString()}
+              </CardDescription>
+            </div>
+            <OverallStatusBadge status={requirement.overallStatus} />
+          </CardHeader>
+          <CardContent>
+            <h3 className="mb-4 text-lg font-medium">Medicines Requested</h3>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Medicine</TableHead>
+                  <TableHead className="text-right">Requested Quantity</TableHead>
+                  <TableHead className="text-right">Approved Quantity</TableHead>
+                  {userRole === USER_ROLE.WAREHOUSE && <TableHead className="text-right">Available Stock</TableHead>}
+                  <TableHead className="text-right">Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {requirement.medicines?.map((medicineItem) => {
+                  const medicineId = medicineItem.medicineId?._id;
+                  const availableStock = medicineStockMap.get(medicineId);
 
-                return (
-                  <TableRow key={medicineId || Math.random()}>
-                    <TableCell>{medicineItem.medicineId?.name || "N/A"}</TableCell>
-                    <TableCell className="text-right">{medicineItem.requestedQuantity}</TableCell>
-                    <TableCell className="text-right">{medicineItem.approvedQuantity}</TableCell>
-                    {userRole === USER_ROLE.WAREHOUSE && (
+                  return (
+                    <TableRow key={medicineId || Math.random()}>
+                      <TableCell>{medicineItem.medicineId?.name || "N/A"}</TableCell>
+                      <TableCell className="text-right">{medicineItem.requestedQuantity}</TableCell>
+                      <TableCell className="text-right">{medicineItem.approvedQuantity}</TableCell>
+                      {userRole === USER_ROLE.WAREHOUSE && (
+                        <TableCell className="text-right">
+                          {availableStock !== undefined ? availableStock : "N/A"}
+                        </TableCell>
+                      )}
                       <TableCell className="text-right">
-                        {availableStock !== undefined ? availableStock : "N/A"}
+                        <OverallStatusBadge status={medicineItem.status} />
                       </TableCell>
-                    )}
-                    <TableCell className="text-right">
-                      <OverallStatusBadge status={medicineItem.status} />
+                    </TableRow>
+                  );
+                })}
+                {(!requirement.medicines || requirement.medicines.length === 0) && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={userRole === USER_ROLE.WAREHOUSE ? 5 : 4}
+                      className="text-center text-muted-foreground"
+                    >
+                      No medicines listed in this requirement.
                     </TableCell>
                   </TableRow>
-                );
-              })}
-              {(!requirement.medicines || requirement.medicines.length === 0) && (
-                <TableRow>
-                  <TableCell
-                    colSpan={userRole === USER_ROLE.WAREHOUSE ? 5 : 4}
-                    className="text-center text-muted-foreground"
-                  >
-                    No medicines listed in this requirement.
-                  </TableCell>
-                </TableRow>
+                )}
+              </TableBody>
+            </Table>
+            {userRole === USER_ROLE.WAREHOUSE &&
+              stockAvailability?.canFulfillEntireRequirement &&
+              requirement.overallStatus === REQUIREMENT_STATUS.PENDING && (
+                <div className="mt-6 flex justify-end">
+                  <Button onClick={approveRequirement} isLoading={isApproving}>
+                    Approve Requirement
+                  </Button>
+                </div>
               )}
-            </TableBody>
-          </Table>
-          {userRole === USER_ROLE.WAREHOUSE &&
-            stockAvailability?.canFulfillEntireRequirement &&
-            requirement.overallStatus === REQUIREMENT_STATUS.PENDING && (
+            {userRole === USER_ROLE.WAREHOUSE && requirement.overallStatus === REQUIREMENT_STATUS.APPROVED && (
               <div className="mt-6 flex justify-end">
-                <Button onClick={approveRequirement} isLoading={isApproving}>
-                  Approve Requirement
-                </Button>
+                <Button onClick={() => setOpenCreateShipmentModal(true)}>Create Shipment</Button>
               </div>
             )}
-          {userRole === "warehouse" && requirement.institutionId?.location && (
-            <div className="mt-6">
-              <h3 className="mb-2 text-lg font-medium">Delivery Address</h3>
-              <p className="text-sm text-muted-foreground">
-                {requirement.institutionId.name} <br />
-                {requirement.institutionId.location.address} <br />
-                {requirement.institutionId.location.city}, {requirement.institutionId.location.state} -{" "}
-                {requirement.institutionId.location.pincode} <br />
-                District: {requirement.institutionId.location.district}
-              </p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+            {userRole === "warehouse" && requirement.institutionId?.location && (
+              <div className="mt-6">
+                <h3 className="mb-2 text-lg font-medium">Delivery Address</h3>
+                <p className="text-sm text-muted-foreground">
+                  {requirement.institutionId.name} <br />
+                  {requirement.institutionId.location.address} <br />
+                  {requirement.institutionId.location.city}, {requirement.institutionId.location.state} -{" "}
+                  {requirement.institutionId.location.pincode} <br />
+                  District: {requirement.institutionId.location.district}
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Conditionally render the ShipmentTrackingCard */}
+        {requirement.logisticId && (
+          <ShipmentTrackingCard logisticDetails={requirement.logisticId} createdAt={requirement.createdAt} />
+        )}
+      </div>
+    </>
   );
 };
 
