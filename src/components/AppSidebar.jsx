@@ -17,13 +17,13 @@ import {
   Building2,
   Warehouse,
   Factory,
-  Flask,
   PillIcon,
   Package,
   ClipboardList,
   ClipboardCheck,
   Boxes,
   FileText,
+  FlaskConical,
 } from "lucide-react";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -57,7 +57,7 @@ const navItems = [
   {
     name: "Salts",
     url: "/salts",
-    icon: Flask,
+    icon: FlaskConical,
     roles: [USER_ROLE.ADMIN],
   },
   {
@@ -76,13 +76,13 @@ const navItems = [
     name: "Warehouse Logs",
     url: "/warehouse-logs",
     icon: ClipboardList,
-    roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
+    roles: [USER_ROLE.ADMIN],
   },
   {
     name: "Institution Logs",
     url: "/institution-logs",
     icon: ClipboardCheck,
-    roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
+    roles: [USER_ROLE.ADMIN],
   },
   {
     name: "Institution Stock",
