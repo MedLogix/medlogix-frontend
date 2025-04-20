@@ -44,8 +44,8 @@ const ShipmentTrackingCard = ({ logisticDetails, createdAt }) => {
     { title: "Requirement Placed", timestamp: createdAt },
     { title: "Loaded", timestamp: firstVehicleTimestamps.loadedAt },
     { title: "Departed", timestamp: firstVehicleTimestamps.departedAt },
-    { title: "Arrived", timestamp: firstVehicleTimestamps.arrivedAt },
-    { title: "Unloaded / Delivered", timestamp: firstVehicleTimestamps.unloadedAt },
+    { title: "Delivered", timestamp: firstVehicleTimestamps.arrivedAt },
+    { title: "Unloaded / Received", timestamp: firstVehicleTimestamps.unloadedAt },
   ].filter((step) => formatTimestamp(step.timestamp)); // Filter out steps without valid timestamps
 
   return (

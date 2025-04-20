@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import CreateShipmentModal from "@/components/Modals/CreateShipmentModal";
 import ShipmentTrackingCard from "@/components/ShipmentTrackingCard";
+import logisticsService from "@/services/logisticsService";
 
 const RequirementDetails = () => {
   const { id: requirementId } = useParams();
@@ -48,6 +49,36 @@ const RequirementDetails = () => {
     },
     onError: (error) => {
       toast.error(error.response?.data?.message || "Failed to approve requirement");
+    },
+  });
+
+  const { mutate: markAsDelivered, isPending: isMarkingAsDelivered } = useMutation({
+    mutationFn: async () => {
+      const { data } = await logisticsService.updateLogisticsStatus(requirement.logisticId._id, {
+        status: "Delivered",
+      });
+      return data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["requirement", requirementId] });
+      toast.success("Shipment marked as delivered successfully");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to mark as delivered");
+    },
+  });
+
+  const { mutate: markAsReceived, isPending: isMarkingAsReceived } = useMutation({
+    mutationFn: async () => {
+      const { data } = await logisticsService.markAsReceived(requirement.logisticId._id);
+      return data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["requirement", requirementId] });
+      toast.success("Requirement marked as received successfully");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to mark as received");
     },
   });
 
@@ -158,6 +189,20 @@ const RequirementDetails = () => {
             {userRole === USER_ROLE.WAREHOUSE && requirement.overallStatus === REQUIREMENT_STATUS.APPROVED && (
               <div className="mt-6 flex justify-end">
                 <Button onClick={() => setOpenCreateShipmentModal(true)}>Create Shipment</Button>
+              </div>
+            )}
+            {userRole === USER_ROLE.WAREHOUSE && requirement.overallStatus === REQUIREMENT_STATUS.SHIPPED && (
+              <div className="mt-6 flex justify-end">
+                <Button onClick={markAsDelivered} isLoading={isMarkingAsDelivered}>
+                  Mark as Delivered
+                </Button>
+              </div>
+            )}
+            {userRole === USER_ROLE.INSTITUTION && requirement.overallStatus === REQUIREMENT_STATUS.DELIVERED && (
+              <div className="mt-6 flex justify-end">
+                <Button onClick={markAsReceived} isLoading={isMarkingAsReceived}>
+                  Mark as Received
+                </Button>
               </div>
             )}
             {userRole === "warehouse" && requirement.institutionId?.location && (
