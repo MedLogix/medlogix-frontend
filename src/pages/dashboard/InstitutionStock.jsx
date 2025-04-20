@@ -1,4 +1,4 @@
-import CreateWarehouseStockModal from "@/components/Modals/CreateWarehouseStockModal";
+import LogInstituitionStockModal from "@/components/Modals/LogInstituitionStockModal";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
@@ -114,7 +114,11 @@ const InstitutionStock = () => {
 
   return (
     <div className="container mx-auto">
-      <CreateWarehouseStockModal isOpen={isCreateModalOpen} setIsOpen={setIsCreateModalOpen} />
+      <LogInstituitionStockModal
+        isOpen={isCreateModalOpen}
+        setIsOpen={setIsCreateModalOpen}
+        institutionStocks={institutionStockDocs}
+      />
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Institution Stock</h1>
       </div>
@@ -126,7 +130,7 @@ const InstitutionStock = () => {
           onChange={handleSearchChange}
           wrapperClassName="max-w-sm w-full"
         />
-        <Button onClick={() => setIsCreateModalOpen(true)}>Add Stock</Button>
+        <Button onClick={() => setIsCreateModalOpen(true)}>Log Stock Usage</Button>
       </div>
       {isLoading ? (
         <div>Loading...</div>
