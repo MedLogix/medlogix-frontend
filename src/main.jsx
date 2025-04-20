@@ -22,6 +22,8 @@ import WarehouseStockDetails from "./pages/dashboard/WarehouseStockDetails";
 import WarehouseLogs from "./pages/dashboard/WarehouseLogs";
 import Requirements from "./pages/dashboard/Requirements";
 import RequirementDetails from "./pages/dashboard/RequirementDetails";
+import InstitutionStock from "./pages/dashboard/InstitutionStock";
+import InstitutionStockDetails from "./pages/dashboard/InstitutionStockDetails";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -49,6 +51,8 @@ createRoot(document.getElementById("root")).render(
               <Route path="/warehouse-stock/:id" element={<WarehouseStockDetails />} />
               <Route path="/requirements" element={<Requirements />} />
               <Route path="/requirements/:id" element={<RequirementDetails />} />
+              <Route path="/institution-stock" element={<InstitutionStock />} />
+              <Route path="/institution-stock/:id" element={<InstitutionStockDetails />} />
             </Route>
           </Route>
         </Routes>

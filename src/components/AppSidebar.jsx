@@ -39,19 +39,19 @@ const navItems = [
     name: "Manufacturers",
     url: "/manufacturers",
     icon: Home,
-    roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
+    roles: [USER_ROLE.ADMIN],
   },
   {
     name: "Salts",
     url: "/salts",
     icon: Map,
-    roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
+    roles: [USER_ROLE.ADMIN],
   },
   {
     name: "Medicines",
     url: "/medicines",
     icon: Map,
-    roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
+    roles: [USER_ROLE.ADMIN],
   },
   {
     name: "Warehouse Stock",
