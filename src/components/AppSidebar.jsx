@@ -11,7 +11,20 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { USER_ROLE } from "@/lib/constants";
-import { Ambulance, Home, Map } from "lucide-react";
+import {
+  Ambulance,
+  Home,
+  Building2,
+  Warehouse,
+  Factory,
+  Flask,
+  PillIcon,
+  Package,
+  ClipboardList,
+  ClipboardCheck,
+  Boxes,
+  FileText,
+} from "lucide-react";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router";
@@ -26,61 +39,61 @@ const navItems = [
   {
     name: "Institutions",
     url: "/institutions",
-    icon: Home,
+    icon: Building2,
     roles: [USER_ROLE.ADMIN],
   },
   {
     name: "Warehouses",
     url: "/warehouses",
-    icon: Home,
+    icon: Warehouse,
     roles: [USER_ROLE.ADMIN],
   },
   {
     name: "Manufacturers",
     url: "/manufacturers",
-    icon: Home,
+    icon: Factory,
     roles: [USER_ROLE.ADMIN],
   },
   {
     name: "Salts",
     url: "/salts",
-    icon: Map,
+    icon: Flask,
     roles: [USER_ROLE.ADMIN],
   },
   {
     name: "Medicines",
     url: "/medicines",
-    icon: Map,
+    icon: PillIcon,
     roles: [USER_ROLE.ADMIN],
   },
   {
     name: "Warehouse Stock",
     url: "/warehouse-stock",
-    icon: Map,
+    icon: Package,
     roles: [USER_ROLE.WAREHOUSE],
   },
   {
     name: "Warehouse Logs",
     url: "/warehouse-logs",
-    icon: Map,
+    icon: ClipboardList,
     roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
   },
   {
     name: "Institution Logs",
     url: "/institution-logs",
-    icon: Map,
+    icon: ClipboardCheck,
     roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
   },
   {
     name: "Institution Stock",
     url: "/institution-stock",
-    icon: Map,
+    icon: Boxes,
     roles: [USER_ROLE.INSTITUTION],
   },
   {
     name: "Requirements",
     url: "/requirements",
-    icon: Map,
+    icon: FileText,
     roles: [USER_ROLE.INSTITUTION, USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
   },
 ];
