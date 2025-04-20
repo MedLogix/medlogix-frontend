@@ -1,16 +1,19 @@
 import RequirementService from "@/services/requirementService";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import OverallStatusBadge from "@/components/OverallStatusBadge";
 import { useMemo } from "react";
-import { USER_ROLE } from "@/lib/constants";
+import { REQUIREMENT_STATUS, USER_ROLE } from "@/lib/constants";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const RequirementDetails = () => {
   const { id: requirementId } = useParams();
   const { userRole } = useSelector((state) => state.user);
+  const queryClient = useQueryClient();
 
   const { data: requirement, isLoading } = useQuery({
     queryKey: ["requirement", requirementId],
@@ -19,6 +22,30 @@ const RequirementDetails = () => {
       return response?.data?.data;
     },
     enabled: !!requirementId,
+  });
+
+  const { data: stockAvailability, isLoading: isStockAvailabilityLoading } = useQuery({
+    queryKey: ["stock-availability", requirementId],
+    queryFn: async () => {
+      const { data } = await RequirementService.getWarehouseStockAvailability(requirementId);
+      return data?.data;
+    },
+    enabled: !!requirementId && userRole === USER_ROLE.WAREHOUSE,
+  });
+
+  const { mutate: approveRequirement, isPending: isApproving } = useMutation({
+    mutationFn: async () => {
+      const { data } = await RequirementService.approveRequirement(requirementId);
+      return data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["requirement", requirementId] });
+      queryClient.invalidateQueries({ queryKey: ["stock-availability", requirementId] });
+      toast.success("Requirement approved successfully");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to approve requirement");
+    },
   });
 
   const title = useMemo(() => {
@@ -37,7 +64,13 @@ const RequirementDetails = () => {
     return "";
   }, [userRole, requirement]);
 
-  if (isLoading) {
+  // Helper memo to map medicine stock for easy lookup
+  const medicineStockMap = useMemo(() => {
+    if (!stockAvailability?.detailedStockInfo) return new Map();
+    return new Map(stockAvailability.detailedStockInfo.map((item) => [item.medicineId, item.availableStock]));
+  }, [stockAvailability]);
+
+  if (isLoading || (userRole === USER_ROLE.WAREHOUSE && isStockAvailabilityLoading)) {
     return <div className="p-4">Loading...</div>;
   }
 
@@ -64,32 +97,55 @@ const RequirementDetails = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Medicine Name</TableHead>
+                <TableHead>Medicine</TableHead>
                 <TableHead className="text-right">Requested Quantity</TableHead>
                 <TableHead className="text-right">Approved Quantity</TableHead>
+                {userRole === USER_ROLE.WAREHOUSE && <TableHead className="text-right">Available Stock</TableHead>}
                 <TableHead className="text-right">Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {requirement.medicines?.map((medicineItem) => (
-                <TableRow key={medicineItem.medicineId?._id || Math.random()}>
-                  <TableCell>{medicineItem.medicineId?.name || "N/A"}</TableCell>
-                  <TableCell className="text-right">{medicineItem.requestedQuantity}</TableCell>
-                  <TableCell className="text-right">{medicineItem.approvedQuantity}</TableCell>
-                  <TableCell className="text-right">
-                    <OverallStatusBadge status={medicineItem.status} />
-                  </TableCell>
-                </TableRow>
-              ))}
+              {requirement.medicines?.map((medicineItem) => {
+                const medicineId = medicineItem.medicineId?._id;
+                const availableStock = medicineStockMap.get(medicineId);
+
+                return (
+                  <TableRow key={medicineId || Math.random()}>
+                    <TableCell>{medicineItem.medicineId?.name || "N/A"}</TableCell>
+                    <TableCell className="text-right">{medicineItem.requestedQuantity}</TableCell>
+                    <TableCell className="text-right">{medicineItem.approvedQuantity}</TableCell>
+                    {userRole === USER_ROLE.WAREHOUSE && (
+                      <TableCell className="text-right">
+                        {availableStock !== undefined ? availableStock : "N/A"}
+                      </TableCell>
+                    )}
+                    <TableCell className="text-right">
+                      <OverallStatusBadge status={medicineItem.status} />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
               {(!requirement.medicines || requirement.medicines.length === 0) && (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center text-muted-foreground">
+                  <TableCell
+                    colSpan={userRole === USER_ROLE.WAREHOUSE ? 5 : 4}
+                    className="text-center text-muted-foreground"
+                  >
                     No medicines listed in this requirement.
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
+          {userRole === USER_ROLE.WAREHOUSE &&
+            stockAvailability?.canFulfillEntireRequirement &&
+            requirement.overallStatus === REQUIREMENT_STATUS.PENDING && (
+              <div className="mt-6 flex justify-end">
+                <Button onClick={approveRequirement} isLoading={isApproving}>
+                  Approve Requirement
+                </Button>
+              </div>
+            )}
           {userRole === "warehouse" && requirement.institutionId?.location && (
             <div className="mt-6">
               <h3 className="mb-2 text-lg font-medium">Delivery Address</h3>

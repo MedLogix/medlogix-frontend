@@ -5,10 +5,6 @@ const RequirementService = {
     return apiClient.post("/api/v1/requirements", payload);
   },
 
-  getWarehouseRequirements: (payload) => {
-    return apiClient.get("/api/v1/requirements/warehouse", payload);
-  },
-
   getInstitutionRequirements: (payload) => {
     return apiClient.get("/api/v1/requirements", payload);
   },
@@ -17,8 +13,12 @@ const RequirementService = {
     return apiClient.get(`/api/v1/requirements/${requirementId}`);
   },
 
-  approveRequirementItems: (requirementId, payload) => {
-    return apiClient.patch(`/api/v1/requirements/${requirementId}/approve`, payload);
+  getWarehouseStockAvailability: (requirementId) => {
+    return apiClient.get(`/api/v1/requirements/${requirementId}/stock-availability`);
+  },
+
+  approveRequirement: (requirementId) => {
+    return apiClient.patch(`/api/v1/requirements/${requirementId}/approve`);
   },
 };
 

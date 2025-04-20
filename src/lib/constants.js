@@ -17,12 +17,10 @@ export const VERIFICATION_STATUS_OPTIONS = [
   { label: "Rejected", value: VERIFICATION_STATUS.REJECTED },
 ];
 
-export const REQUIREMENT_STATUS_OPTIONS = [
-  { label: "Pending", value: "pending" },
-  { label: "Partially Approved", value: "partially approved" },
-  { label: "Approved", value: "approved" },
-  { label: "Rejected", value: "rejected" },
-  { label: "In Progress", value: "in progress" }, // Status used when shipment is created
-  { label: "Shipped", value: "shipped" }, // Status potentially updated via shipment
-  { label: "Delivered", value: "delivered" }, // Status potentially updated via shipment
-];
+export const REQUIREMENT_STATUS = {
+  PENDING: "Pending",
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
+  SHIPPED: "Shipped",
+  DELIVERED: "Delivered",
+};
