@@ -20,6 +20,10 @@ const RequirementService = {
   approveRequirement: (requirementId) => {
     return apiClient.patch(`/api/v1/requirements/${requirementId}/approve`);
   },
+
+  getAllRequirements: () => {
+    return apiClient.get("/api/v1/requirements/admin");
+  },
 };
 
 export default RequirementService;

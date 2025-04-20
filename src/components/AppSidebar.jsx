@@ -57,7 +57,7 @@ const navItems = [
     name: "Warehouse Stock",
     url: "/warehouse-stock",
     icon: Map,
-    roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
+    roles: [USER_ROLE.WAREHOUSE],
   },
   {
     name: "Warehouse Logs",
@@ -66,10 +66,16 @@ const navItems = [
     roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
   },
   {
+    name: "Institution Logs",
+    url: "/institution-logs",
+    icon: Map,
+    roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
+  },
+  {
     name: "Institution Stock",
     url: "/institution-stock",
     icon: Map,
-    roles: [USER_ROLE.ADMIN, USER_ROLE.INSTITUTION],
+    roles: [USER_ROLE.INSTITUTION],
   },
   {
     name: "Requirements",

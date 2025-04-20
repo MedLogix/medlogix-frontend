@@ -93,14 +93,25 @@ const Requirements = () => {
   const { data: requirementsData, isLoading } = useQuery({
     queryKey: ["requirements", page, pageSize, search],
     queryFn: async () => {
-      const { data } = await RequirementService.getInstitutionRequirements({
-        params: {
-          page: page + 1,
-          limit: pageSize,
-          search,
-        },
-      });
-      return data?.data;
+      if (userRole === USER_ROLE.ADMIN) {
+        const { data } = await RequirementService.getAllRequirements({
+          params: {
+            page: page + 1,
+            limit: pageSize,
+            search,
+          },
+        });
+        return data?.data;
+      } else {
+        const { data } = await RequirementService.getInstitutionRequirements({
+          params: {
+            page: page + 1,
+            limit: pageSize,
+            search,
+          },
+        });
+        return data?.data;
+      }
     },
     keepPreviousData: true,
   });
@@ -189,7 +200,9 @@ const Requirements = () => {
           onChange={handleSearchChange}
           wrapperClassName="max-w-sm w-full"
         />
-        <Button onClick={() => setIsCreateModalOpen(true)}>Create Requirement</Button>
+        {userRole === USER_ROLE.INSTITUTION && (
+          <Button onClick={() => setIsCreateModalOpen(true)}>Create Requirement</Button>
+        )}
       </div>
       {isLoading ? (
         <div>Loading...</div>

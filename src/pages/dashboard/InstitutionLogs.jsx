@@ -3,7 +3,7 @@ import Combobox from "@/components/ui/combobox";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import usePaginationSearchParams from "@/hooks/usePaginationSearchParams";
-import { WAREHOUSE_LOG_TYPE_OPTIONS } from "@/lib/constants";
+import { INSTITUTION_LOG_TYPE_OPTIONS } from "@/lib/constants";
 import LogService from "@/services/logService";
 import { useQuery } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
@@ -12,8 +12,8 @@ import { useCallback, useMemo, useState } from "react";
 
 const columns = [
   {
-    accessorKey: "warehouseId.name",
-    header: "Warehouse Name",
+    accessorKey: "institutionId.name",
+    header: "Institution Name",
   },
   {
     accessorKey: "medicineId.name",
@@ -49,14 +49,14 @@ const columns = [
   },
 ];
 
-const WarehouseLogs = () => {
+const InstitutionLogs = () => {
   const { page, setPage, pageSize, setPageSize, search, setSearch, filters, setFilters } = usePaginationSearchParams();
   const [searchQuery, setSearchQuery] = useState(search);
 
-  const { data: warehouseData, isLoading } = useQuery({
-    queryKey: ["warehouse-logs", page, pageSize, search, filters],
+  const { data: institutionData, isLoading } = useQuery({
+    queryKey: ["institution-logs", page, pageSize, search, filters],
     queryFn: async () => {
-      const { data } = await LogService.getWarehouseLogs({
+      const { data } = await LogService.getInstitutionLogs({
         params: {
           page: page + 1,
           limit: pageSize,
@@ -83,8 +83,8 @@ const WarehouseLogs = () => {
     [page, pageSize, setPage, setPageSize]
   );
 
-  const warehouseDocs = useMemo(() => warehouseData?.docs || [], [warehouseData]);
-  const pageCount = useMemo(() => warehouseData?.totalPages ?? 0, [warehouseData]);
+  const institutionDocs = useMemo(() => institutionData?.docs || [], [institutionData]);
+  const pageCount = useMemo(() => institutionData?.totalPages ?? 0, [institutionData]);
 
   const debouncedSearch = useMemo(
     () =>
@@ -106,7 +106,7 @@ const WarehouseLogs = () => {
   return (
     <div className="container mx-auto">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Warehouse Logs</h1>
+        <h1 className="text-2xl font-bold">Institution Logs</h1>
       </div>
       <div className="mb-4 flex items-center gap-4">
         <Input
@@ -118,7 +118,7 @@ const WarehouseLogs = () => {
         />
 
         <Combobox
-          options={WAREHOUSE_LOG_TYPE_OPTIONS}
+          options={INSTITUTION_LOG_TYPE_OPTIONS}
           value={filters?.type}
           onChange={handleFilterChange}
           placeholder="Select type"
@@ -132,7 +132,7 @@ const WarehouseLogs = () => {
       ) : (
         <DataTable
           columns={columns}
-          data={warehouseDocs}
+          data={institutionDocs}
           pageCount={pageCount}
           pageIndex={page}
           pageSize={pageSize}
@@ -144,4 +144,4 @@ const WarehouseLogs = () => {
   );
 };
 
-export default WarehouseLogs;
+export default InstitutionLogs;

@@ -24,3 +24,15 @@ export const REQUIREMENT_STATUS = {
   SHIPPED: "Shipped",
   DELIVERED: "Delivered",
 };
+
+export const INSTITUTION_LOG_TYPE_OPTIONS = [
+  { label: "All", value: "" },
+  { label: "Usage", value: "usage" },
+  { label: "Addition", value: "addition" },
+];
+
+export const WAREHOUSE_LOG_TYPE_OPTIONS = [
+  { label: "All", value: "" },
+  { label: "Purchase", value: "purchase" },
+  { label: "Sale", value: "sale" },
+];
