@@ -60,16 +60,22 @@ const navItems = [
     roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
   },
   {
+    name: "Warehouse Logs",
+    url: "/warehouse-logs",
+    icon: Map,
+    roles: [USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
+  },
+  {
     name: "Institution Stock",
     url: "/institution-stock",
     icon: Map,
     roles: [USER_ROLE.ADMIN, USER_ROLE.INSTITUTION],
   },
   {
-    name: "Incoming Requirements",
-    url: "/warehouse-incoming-requirements",
+    name: "Requirements",
+    url: "/requirements",
     icon: Map,
-    roles: [USER_ROLE.WAREHOUSE],
+    roles: [USER_ROLE.INSTITUTION, USER_ROLE.ADMIN, USER_ROLE.WAREHOUSE],
   },
 ];
 

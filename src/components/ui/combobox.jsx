@@ -63,6 +63,7 @@ const Combobox = ({
           calculateButtonWidth();
         }
       }}
+      modal={true}
     >
       <PopoverTrigger asChild>
         <Button

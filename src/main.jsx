@@ -19,6 +19,8 @@ import Salts from "./pages/dashboard/Salts";
 import Warehouses from "./pages/dashboard/Warehouses";
 import WarehouseStock from "./pages/dashboard/WarehouseStock";
 import WarehouseStockDetails from "./pages/dashboard/WarehouseStockDetails";
+import WarehouseLogs from "./pages/dashboard/WarehouseLogs";
+import Requirements from "./pages/dashboard/Requirements";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -41,8 +43,10 @@ createRoot(document.getElementById("root")).render(
               <Route path="/medicines" element={<Medicines />} />
               <Route path="/institutions" element={<Institutions />} />
               <Route path="/warehouses" element={<Warehouses />} />
+              <Route path="/warehouse-logs" element={<WarehouseLogs />} />
               <Route path="/warehouse-stock" element={<WarehouseStock />} />
               <Route path="/warehouse-stock/:id" element={<WarehouseStockDetails />} />
+              <Route path="/requirements" element={<Requirements />} />
             </Route>
           </Route>
         </Routes>
