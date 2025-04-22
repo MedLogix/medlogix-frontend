@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Page Components (`src/pages/`)
+
+This document describes the page components located in the [src/pages/](mdc:src/pages) directory. Page components represent the main content for specific URL routes and are typically rendered within a layout component via `<Outlet />`.
+
+See rule [02-app-structure.mdc](mdc:.cursor/rules/02-app-structure.mdc) for routing definitions and rule [09-layouts.mdc](mdc:.cursor/rules/09-layouts.mdc) for layout details.
+
+## Page Structure
+
+Pages are organized into subdirectories based on application sections:
+
+*   **Authentication Pages (`src/pages/auth/`)**:
+    *   These components handle user login, registration, and related authentication flows.
+    *   They are rendered within the [AuthLayout](mdc:src/layouts/AuthLayout.jsx).
+    *   Examples include: [Login.jsx](mdc:src/pages/auth/Login.jsx), [AdminLogin.jsx](mdc:src/pages/auth/AdminLogin.jsx), [InstituitionSignup.jsx](mdc:src/pages/auth/InstituitionSignup.jsx), [WarehouseSignup.jsx](mdc:src/pages/auth/WarehouseSignup.jsx), [SuccessfulRegistration.jsx](mdc:src/pages/auth/SuccessfulRegistration.jsx).
+
+*   **Dashboard Pages (`src/pages/dashboard/`)**:
+    *   These components represent the different sections and features available to authenticated users within the main application dashboard.
+    *   They are rendered within the [DashboardLayout](mdc:src/layouts/DashboardLayout.jsx) (which is nested within [ProtectedLayout](mdc:src/layouts/ProtectedLayout.jsx)).
+    *   Examples include:
+        *   Overview: [Home.jsx](mdc:src/pages/dashboard/Home.jsx)
+        *   Core Data: [Manufacturers.jsx](mdc:src/pages/dashboard/Manufacturers.jsx), [Salts.jsx](mdc:src/pages/dashboard/Salts.jsx), [Medicines.jsx](mdc:src/pages/dashboard/Medicines.jsx), [Institutions.jsx](mdc:src/pages/dashboard/Institutions.jsx), [Warehouses.jsx](mdc:src/pages/dashboard/Warehouses.jsx)
+        *   Warehouse Features: [WarehouseStock.jsx](mdc:src/pages/dashboard/WarehouseStock.jsx), [WarehouseStockDetails.jsx](mdc:src/pages/dashboard/WarehouseStockDetails.jsx), [WarehouseLogs.jsx](mdc:src/pages/dashboard/WarehouseLogs.jsx)
+        *   Institution Features: [InstitutionStock.jsx](mdc:src/pages/dashboard/InstitutionStock.jsx), [InstitutionStockDetails.jsx](mdc:src/pages/dashboard/InstitutionStockDetails.jsx), [InstitutionLogs.jsx](mdc:src/pages/dashboard/InstitutionLogs.jsx)
+        *   Requirements: [Requirements.jsx](mdc:src/pages/dashboard/Requirements.jsx), [RequirementDetails.jsx](mdc:src/pages/dashboard/RequirementDetails.jsx)

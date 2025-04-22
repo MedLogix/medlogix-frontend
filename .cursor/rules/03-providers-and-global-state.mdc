@@ -1,0 +1,31 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Global Providers and State Management
+
+This document describes the global context providers set up in [src/components/Providers.jsx](mdc:src/components/Providers.jsx), which wrap the entire application.
+
+## Providers Setup
+
+The `Providers` component initializes and configures the following:
+
+1.  **Redux State Management:**
+    *   Uses `<Provider>` from `react-redux`.
+    *   The Redux store is imported from `@/store` (likely [src/store/index.js](mdc:src/store/index.js) or similar).
+    *   Refer to the `src/store/` directory for slice definitions and store configuration.
+
+2.  **React Query Data Fetching:**
+    *   Uses `<QueryClientProvider>` from `@tanstack/react-query`.
+    *   A default `QueryClient` is instantiated within the `Providers` component.
+    *   API calls managed by React Query are likely found in `src/services/` or custom hooks in `src/hooks/`.
+
+3.  **Theming:**
+    *   Uses `<ThemeProvider>` component located at [src/providers/theme-provider.jsx](mdc:src/providers/theme-provider.jsx).
+    *   The default theme is set to `light`.
+    *   Theme preference is stored in local storage under the key `vite-ui-theme`.
+
+4.  **Notifications (Toasts):**
+    *   Uses the `<Toaster>` component from [Sonner](mdc:https:/sonner.emilkowal.ski), rendered via [src/components/ui/sonner.jsx](mdc:src/components/ui/sonner.jsx).
+    *   Toasts are configured to appear at the `top-center` of the screen.

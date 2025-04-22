@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Layout Components (`src/layouts/`)
+
+This document describes the layout components used to structure different sections of the application. Layouts are applied via nested routing defined in [src/main.jsx](mdc:src/main.jsx). See rule [02-app-structure.mdc](mdc:.cursor/rules/02-app-structure.mdc) for routing details.
+
+Layout components typically render common UI elements (like sidebars, headers) and an `<Outlet />` component from `react-router` where the nested child route's component is rendered.
+
+## Available Layouts
+
+*   **[AuthLayout.jsx](mdc:src/layouts/AuthLayout.jsx)**:
+    *   Used for authentication pages (e.g., `/login`, `/admin-login`, `/institution-signup`).
+    *   Provides the basic structure for forms and branding related to authentication.
+    *   Likely centers content on the page.
+
+*   **[ProtectedLayout.jsx](mdc:src/layouts/ProtectedLayout.jsx)**:
+    *   Acts as an authentication guard for nested routes.
+    *   Checks if the user is authenticated (likely using `isUserAuthenticated` from [src/lib/utils.js](mdc:src/lib/utils.js) or checking Redux state).
+    *   If authenticated, it renders the child routes via `<Outlet />`.
+    *   If not authenticated, it typically redirects the user to the login page (e.g., `/login`).
+
+*   **[DashboardLayout.jsx](mdc:src/layouts/DashboardLayout.jsx)**:
+    *   Provides the main application interface for authenticated users.
+    *   Typically includes components like a sidebar ([AppSidebar.jsx](mdc:src/components/AppSidebar.jsx)), a header, and a main content area.
+    *   Renders the specific dashboard page component (e.g., `/manufacturers`, `/medicines`) within its main content area via `<Outlet />`.
+    *   This layout is nested inside `ProtectedLayout` in the routing configuration.

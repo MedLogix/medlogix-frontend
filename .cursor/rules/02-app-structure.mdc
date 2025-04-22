@@ -1,0 +1,43 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Application Structure and Routing
+
+This document describes the main structure of the `src` directory, the application entry point, routing setup, and layout components.
+
+## Source Directory (`src/`)
+
+The [src/](mdc:src) directory contains the core application code, organized as follows:
+
+*   `main.jsx`: The main application entry point.
+*   `index.css`: Global CSS styles.
+*   `assets/`: Static assets (images, fonts, etc.).
+*   `components/`: Reusable React components, including base UI elements likely in `components/ui/`.
+*   `hooks/`: Custom React hooks.
+*   `layouts/`: Components defining the overall page structure (e.g., Dashboard, Auth).
+*   `lib/`: Utility functions and library configurations (e.g., Axios instance, helper functions).
+*   `pages/`: Top-level components representing application pages/routes.
+*   `providers/`: Application-wide context provider components (e.g., ThemeProvider).
+*   `services/`: Modules for interacting with backend APIs.
+*   `store/`: Redux store configuration and state slices.
+
+## Entry Point (`src/main.jsx`)
+
+*   The application starts in [src/main.jsx](mdc:src/main.jsx).
+*   It uses `createRoot` from `react-dom/client` to render the React application into the DOM element with `id="root"` in [index.html](mdc:index.html).
+*   The root component wraps the application in `<StrictMode>` and the global `<Providers>` component ([src/components/Providers.jsx](mdc:src/components/Providers.jsx)).
+
+## Routing (`react-router`)
+
+*   Routing is handled by `react-router` v6+.
+*   `<BrowserRouter>` wraps the main `<Routes>` definition in [src/main.jsx](mdc:src/main.jsx).
+*   Routes are defined using `<Route>` elements, mapping URL paths to specific components from the `src/pages/` directory.
+
+## Layouts
+
+*   Nested routing is used to apply different layouts to groups of pages:
+    *   **`AuthLayout`** ([src/layouts/AuthLayout.jsx](mdc:src/layouts/AuthLayout.jsx)): Used for authentication-related pages (login, signup).
+    *   **`ProtectedLayout`** ([src/layouts/ProtectedLayout.jsx](mdc:src/layouts/ProtectedLayout.jsx)): Wraps routes that require authentication.
+    *   **`DashboardLayout`** ([src/layouts/DashboardLayout.jsx](mdc:src/layouts/DashboardLayout.jsx)): Provides the main UI structure (sidebar, header, etc.) for the authenticated dashboard sections.

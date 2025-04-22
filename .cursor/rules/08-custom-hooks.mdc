@@ -1,0 +1,27 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Custom Hooks (`src/hooks/`)
+
+This document describes the custom React hooks defined in the [src/hooks/](mdc:src/hooks) directory.
+
+Custom hooks encapsulate reusable stateful logic.
+
+## Available Hooks
+
+*   **[usePaginationSearchParams.js](mdc:src/hooks/usePaginationSearchParams.js)**:
+    *   Manages state related to pagination (e.g., current page, items per page).
+    *   Likely synchronizes this state with URL search parameters (`useSearchParams` from `react-router`).
+    *   Useful for components like data tables that require pagination controlled via the URL.
+
+*   **[use-mobile.jsx](mdc:src/hooks/use-mobile.jsx)**:
+    *   Detects whether the application is being viewed on a mobile-sized screen.
+    *   Probably uses `window.matchMedia` or similar techniques to check screen width against a predefined breakpoint.
+    *   Useful for applying responsive behavior or rendering different components based on screen size.
+
+*   **[use-theme.jsx](mdc:src/hooks/use-theme.jsx)**:
+    *   Provides an interface to interact with the application's theme context.
+    *   Likely consumes the context provided by `ThemeProvider` ([src/providers/theme-provider.jsx](mdc:src/providers/theme-provider.jsx)).
+    *   Allows components to access the current theme (e.g., `light` or `dark`) and potentially toggle between themes.

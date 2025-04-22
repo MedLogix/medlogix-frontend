@@ -1,0 +1,25 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# API Services and Client Configuration
+
+This document describes how the frontend application interacts with the backend API.
+
+## Service Layer Structure
+
+*   API interaction logic is organized into service files within the [src/services/](mdc:src/services) directory.
+*   Each file typically groups API calls related to a specific domain or resource (e.g., [src/services/authService.js](mdc:src/services/authService.js), [src/services/medicineService.js](mdc:src/services/medicineService.js)).
+*   Services export an object containing functions, where each function corresponds to an API endpoint.
+
+## API Client (`apiClient`)
+
+*   All service files utilize a shared, pre-configured Axios instance named `apiClient`, imported from [src/lib/axios.js](mdc:src/lib/axios.js).
+*   **Base URL:** The `apiClient` is configured with a base URL obtained from the `VITE_API_URL` environment variable. All endpoint paths in service files are relative to this base URL.
+*   **Authorization:** A request interceptor is configured in [src/lib/axios.js](mdc:src/lib/axios.js) to automatically attach an authentication token to the `Authorization` header for outgoing requests. 
+    *   The token is retrieved using the `getAuthToken` function from [src/lib/utils.js](mdc:src/lib/utils.js).
+
+## Usage with React Query
+
+*   These service functions are typically consumed within custom hooks (likely in [src/hooks/](mdc:src/hooks)) or directly in components using React Query's `useQuery` and `useMutation` hooks for data fetching, caching, and mutations.

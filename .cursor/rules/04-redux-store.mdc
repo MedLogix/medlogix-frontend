@@ -1,0 +1,32 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Redux Store Structure
+
+This document outlines the setup and structure of the Redux store, configured using Redux Toolkit.
+
+The main store configuration is in [src/store/index.js](mdc:src/store/index.js).
+
+## Store Configuration
+
+*   The store is created using `configureStore` from `@reduxjs/toolkit`.
+*   It likely uses the default middleware provided by `configureStore` (including Redux Thunk for async actions).
+
+## State Slices
+
+The application state is divided into slices, each managed by its own reducer. Slice definitions (including actions and reducers) are located in subdirectories within `src/store/`:
+
+*   **User:** Managed by `userReducer` from [src/store/user/slice.js](mdc:src/store/user/slice.js).
+*   **Manufacturer:** Managed by `manufacturerReducer` from [src/store/manufacturer/slice.js](mdc:src/store/manufacturer/slice.js).
+*   **Salt:** Managed by `saltReducer` from [src/store/salt/slice.js](mdc:src/store/salt/slice.js).
+*   **Medicine:** Managed by `medicineReducer` from [src/store/medicine/slice.js](mdc:src/store/medicine/slice.js).
+
+Each slice typically uses `createSlice` from Redux Toolkit to define its state shape, reducers, and actions.
+
+## Usage
+
+The store is provided to the application via the `<Provider>` component in [src/components/Providers.jsx](mdc:src/components/Providers.jsx).
+
+State can be accessed in components using hooks like `useSelector` from `react-redux`, and actions can be dispatched using `useDispatch`.

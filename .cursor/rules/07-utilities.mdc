@@ -1,0 +1,19 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Utilities and Constants (`src/lib/`)
+
+This document describes the utility functions and constants found in the [src/lib/](mdc:src/lib) directory.
+
+## Files
+
+*   **[src/lib/axios.js](mdc:src/lib/axios.js)**: Configures the shared Axios instance (`apiClient`) used for all API calls. See rule [05-api-services.mdc](mdc:.cursor/rules/05-api-services.mdc) for details.
+
+*   **[src/lib/constants.js](mdc:src/lib/constants.js)**: Contains application-wide constant values. (Contents not inspected in detail, but likely includes things like API endpoints, role names, status codes, etc.).
+
+*   **[src/lib/utils.js](mdc:src/lib/utils.js)**: Provides common helper functions:
+    *   `cn(...inputs)`: A utility function using `clsx` and `tailwind-merge` to conditionally combine and merge Tailwind CSS class names. Essential for working with shadcn/ui components and dynamic styling.
+    *   `getAuthToken()`: Retrieves the `accessToken` from `localStorage`. Used by the Axios request interceptor to add the `Authorization` header.
+    *   `isUserAuthenticated()`: Checks if an authentication token exists in local storage, returning `true` or `false`. Used for conditional rendering or logic based on authentication status.

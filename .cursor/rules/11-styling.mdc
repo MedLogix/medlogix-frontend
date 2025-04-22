@@ -1,0 +1,31 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Styling Approach
+
+This document outlines the primary methods used for styling the application's user interface.
+
+## Tailwind CSS
+
+*   **Primary Framework:** [Tailwind CSS](mdc:https:/tailwindcss.com) is the core styling framework.
+*   **Usage:** Styles are primarily applied using utility classes directly within JSX components.
+*   **Configuration:**
+    *   Main configuration: [tailwind.config.js](mdc:tailwind.config.js)
+    *   PostCSS configuration (for processing Tailwind): [postcss.config.js](mdc:postcss.config.js)
+*   **Helper Function:** The `cn` utility function in [src/lib/utils.js](mdc:src/lib/utils.js) (using `tailwind-merge` and `clsx`) is used to effectively combine and conditionally apply Tailwind classes, especially within reusable components.
+*   **Component Library:** shadcn/ui components ([src/components/ui/](mdc:src/components/ui)) are styled using Tailwind CSS.
+
+## Global CSS
+
+*   **File:** [src/index.css](mdc:src/index.css)
+*   **Purpose:**
+    *   Includes the necessary `@tailwind` directives to inject Tailwind's base, components, and utilities styles.
+    *   Defines base styles for HTML elements.
+    *   Likely contains CSS custom properties (variables) used for theming (e.g., colors, spacing) that Tailwind's configuration might consume.
+    *   May include minimal global styles or overrides where necessary.
+
+## Component-Specific Styles
+
+While Tailwind is primary, individual components might have highly specific, complex, or state-dependent styles that could potentially be defined within the component file itself (e.g., using styled-components if it were installed, or complex inline styles - though less common with Tailwind). However, the dominant pattern is expected to be Tailwind utility classes.

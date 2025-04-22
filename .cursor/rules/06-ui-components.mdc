@@ -1,0 +1,28 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# UI Components
+
+This document describes the organization and types of UI components used in the application.
+
+## Component Structure
+
+Components are primarily located in the [src/components/](mdc:src/components) directory.
+
+*   **Base UI Components (`src/components/ui/`)**: This directory ([src/components/ui/](mdc:src/components/ui)) contains the core, reusable UI elements.
+    *   These components are generated and managed using **[shadcn/ui](mdc:https:/ui.shadcn.com)**.
+    *   Examples include [Button](mdc:src/components/ui/button.jsx), [Input](mdc:src/components/ui/input.jsx), [Table](mdc:src/components/ui/table.jsx), [Dialog](mdc:src/components/ui/dialog.jsx), [Select](mdc:src/components/ui/select.jsx), etc.
+    *   These components are built upon [Radix UI](mdc:https:/www.radix-ui.com) primitives and styled with [Tailwind CSS](mdc:https:/tailwindcss.com).
+    *   The [components.json](mdc:components.json) file at the root likely contains the shadcn/ui configuration.
+    *   A reusable [DataTable](mdc:src/components/ui/data-table) component is also located here.
+
+*   **Application-Specific Components (`src/components/`)**: The root of the components directory contains higher-level components specific to this application's features.
+    *   Examples include: [AppSidebar.jsx](mdc:src/components/AppSidebar.jsx), [ShipmentTrackingCard.jsx](mdc:src/components/ShipmentTrackingCard.jsx), [OverallStatusBadge.jsx](mdc:src/components/OverallStatusBadge.jsx), [FullScreenLoader.jsx](mdc:src/components/FullScreenLoader.jsx).
+    *   Subdirectories like `Modals/` and `Sidebar/` group related composite components.
+
+## Usage
+
+*   Base UI components from `src/components/ui/` are imported and composed to build application-specific components and page layouts.
+*   Application-specific components are typically used within pages ([src/pages/](mdc:src/pages)) or layouts ([src/layouts/](mdc:src/layouts)).

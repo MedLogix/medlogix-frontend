@@ -1,0 +1,45 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Setup and Key Dependencies
+
+This document outlines the core setup and major libraries used in the `medlogix-frontend` project.
+
+## Build & Configuration
+
+*   **Build Tool:** [Vite](mdc:https:/vitejs.dev) is used for development server and production builds. Configuration is in [vite.config.js](mdc:vite.config.js).
+*   **Entry Point:** The application's HTML entry point is [index.html](mdc:index.html).
+*   **Styling:** [Tailwind CSS](mdc:https:/tailwindcss.com) is used for styling, configured via [tailwind.config.js](mdc:tailwind.config.js) and [postcss.config.js](mdc:postcss.config.js).
+*   **Linting/Formatting:** [ESLint](mdc:https:/eslint.org) ([eslint.config.js](mdc:eslint.config.js)), [Prettier](mdc:https:/prettier.io) ([.prettierrc](mdc:.prettierrc)), and [Husky](mdc:https:/typicode.github.io/husky)/[lint-staged](mdc:https:/github.com/okonet/lint-staged) are used for code quality and pre-commit checks (see [package.json](mdc:package.json)).
+*   **Deployment:** Configured for deployment on [Vercel](mdc:https:/vercel.com) via [vercel.json](mdc:vercel.json).
+
+## Core Frameworks & Libraries
+
+*   **UI Framework:** [React](mdc:https:/react.dev) ([react](mdc:node_modules/react/index.js), [react-dom](mdc:node_modules/react-dom/index.js)).
+*   **Routing:** [React Router](mdc:https:/reactrouter.com) (`react-router`).
+*   **State Management:** [Redux Toolkit](mdc:https:/redux-toolkit.js.org) (`@reduxjs/toolkit`, `react-redux`).
+*   **Data Fetching & Caching:** [TanStack Query (React Query)](mdc:https:/tanstack.com/query/latest) (`@tanstack/react-query`).
+*   **HTTP Client:** [Axios](mdc:https:/axios-http.com) (`axios`).
+
+## UI Components & Styling
+
+*   **Component Primitives:** [Radix UI](mdc:https:/www.radix-ui.com) (various `@radix-ui/*` packages).
+*   **Component Library:** Likely [shadcn/ui](mdc:https:/ui.shadcn.com), built upon Radix UI and Tailwind CSS (indicated by dependencies like `class-variance-authority`, `clsx`, `tailwind-merge`, `tailwindcss-animate`, and [components.json](mdc:components.json)).
+*   **Icons:** [Lucide React](mdc:https:/lucide.dev) (`lucide-react`).
+*   **Charting:** [Recharts](mdc:https:/recharts.org) (`recharts`).
+*   **Notifications:** [Sonner](mdc:https:/sonner.emilkowal.ski) (`sonner`).
+
+## Forms & Validation
+
+*   **Form Handling:** [React Hook Form](mdc:https:/react-hook-form.com) (`react-hook-form`).
+*   **Schema Validation:** [Zod](mdc:https:/zod.dev) (`zod`) integrated with React Hook Form via `@hookform/resolvers`.
+
+## Utilities
+
+*   **Date/Time:** [Moment.js](mdc:https:/momentjs.com) (`moment`).
+*   **Theming:** [next-themes](mdc:https:/github.com/pacocoursey/next-themes) (`next-themes`).
+*   **AI SDK:** [`@ai-sdk/react`](mdc:https:/sdk.vercel.ai).
+
+*Refer to [package.json](mdc:package.json) for a full list of dependencies.*
