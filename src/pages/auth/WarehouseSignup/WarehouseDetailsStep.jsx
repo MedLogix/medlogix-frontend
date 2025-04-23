@@ -21,7 +21,7 @@ export default function WarehouseDetailsStep({ form }) {
       <div className="grid grid-cols-2 gap-4">
         <FormField
           control={form.control}
-          name="institutionCode"
+          name="warehouseCode"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Warehouse Code</FormLabel>
