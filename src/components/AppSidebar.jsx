@@ -115,7 +115,7 @@ export function AppSidebar({ ...props }) {
             <Ambulance className="size-5" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">MedLogix</span>
+            <span className="truncate font-semibold capitalize">MedLogix - {userRole}</span>
             <span className="truncate text-xs">Drug Monitoring System</span>
           </div>
         </SidebarMenuButton>

@@ -2,11 +2,18 @@ import { AppSidebar } from "@/components/AppSidebar";
 import Chatbot from "@/components/Chatbot";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Helmet } from "react-helmet";
+import { useSelector } from "react-redux";
 import { Outlet } from "react-router";
 
 export default function DashboardLayout() {
+  const { userRole } = useSelector((state) => state.user);
+
   return (
     <>
+      <Helmet>
+        <title>{`MedLogix - ${userRole}`}</title>
+      </Helmet>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
